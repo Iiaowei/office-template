@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface HeadStyle {
-    Class font();
+    int color() default 0x9999FF;
 }
