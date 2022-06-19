@@ -1,12 +1,11 @@
 package org.example.template.core.annotation;
 
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.FillPatternType;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -64,10 +63,10 @@ public class ExcelGenerator {
         for (Object o : data) {
             if (o instanceof Map) {
                 Map<String, Object> map = (Map<String, Object>) o;
-                Collection<Object> values = map.values();
+                List<Object> values = Arrays.asList(map.values());
                 for (int i = 0; i < values.size(); i++) {
                     HSSFCell cell = row.createCell(i);
-                    cell.setCellValue((String) values[i]);
+                    cell.setCellValue((String) values.get(i));
                 }
             }
         }
