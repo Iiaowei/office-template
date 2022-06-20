@@ -2,15 +2,11 @@ package org.example.template.core.table.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * @author liaowei
- * @version V1.0
- * @date 2022/6/18 1:25:35
- */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ExcelProperty {
+public @interface TableColumn {
     String name() default "";
-    int index() default Integer.MAX_VALUE;
+    int index() default -1;
+
 }

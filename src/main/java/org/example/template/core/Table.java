@@ -11,7 +11,8 @@ import java.util.List;
  * @date 2022/6/17 19:59:17
  */
 public class Table {
-    List<Table> list = new ArrayList<>();
+    private List<Table> list = new ArrayList<>();
+    private String name;
 
     public static void main(String[] args) throws NoSuchFieldException {
 

@@ -23,13 +23,13 @@ import static org.apache.poi.ss.usermodel.BorderStyle.THIN;
  * @date 2022/6/20 11:50:54
  */
 public class SXSSFTableBuilder {
-    private SXSSFWorkbook workbook;
+    private final SXSSFWorkbook workbook;
     private LinkedHashMap<String, String> headersMap;
     private Collection<Map<String, Object>> data;
     private String sheetName = "表1";
     private CellStyle headStyle;
     private CellStyle dataStyle;
-    private Map<String, SpecialColumn> specialColumnMap = new HashMap<>(16);
+    private final Map<String, SpecialColumn> specialColumnMap = new HashMap<>(16);
 
     private SXSSFTableBuilder() {
         workbook = new SXSSFWorkbook();
