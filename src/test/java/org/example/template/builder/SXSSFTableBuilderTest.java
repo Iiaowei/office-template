@@ -1,5 +1,6 @@
 package org.example.template.builder;
 
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.junit.jupiter.api.Test;
 
