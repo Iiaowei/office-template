@@ -34,6 +34,7 @@ public class SXSSFTableBuilder {
     private SXSSFTableBuilder() {
         workbook = new SXSSFWorkbook();
     }
+
     public SXSSFTableBuilder headers(Class<?> headerClass) {
 //        this.headersMap = headers;
         return this;
@@ -48,8 +49,10 @@ public class SXSSFTableBuilder {
         this.data = data;
         return this;
     }
-    public  SXSSFTableBuilder addSpecialColumn(String columnName, short color, Function<Integer, Boolean> function) {
-        specialColumnMap.put(columnName, new SpecialColumn(columnName, color, function));
+
+    public SXSSFTableBuilder addSpecialColumn(String columnName, Function<CellStyleBuilder, XSSFCellStyle> styleFunction, Function<Integer, Boolean> function) {
+        XSSFCellStyle xssfCellStyle = styleFunction.apply(newCellStyleBuilder());
+        specialColumnMap.put(columnName, new SpecialColumn(columnName, xssfCellStyle, function));
         return this;
     }
 
@@ -66,7 +69,7 @@ public class SXSSFTableBuilder {
     }
 
     public CellStyleBuilder newCellStyleBuilder() {
-        CellStyle cellStyle = workbook.createCellStyle();
+        XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
         return new CellStyleBuilder(this.workbook, cellStyle, this);
     }
 
@@ -96,7 +99,7 @@ public class SXSSFTableBuilder {
         Map<String, Integer> columnIndexMap = new HashMap<>(16);
         AtomicInteger atomicIndex = new AtomicInteger(-1);
 
-        try  {
+        try {
             SXSSFSheet sheet = workbook.createSheet(sheetName);
 
             int rowIndex = 0;
@@ -123,12 +126,6 @@ public class SXSSFTableBuilder {
                         SXSSFCell cell = dataRow.createCell(columnIndex);
                         if (specialColumn != null) {
                             XSSFCellStyle specialColumnCellStyle = specialColumn.getCellStyle();
-                            if (specialColumnCellStyle == null) {
-                                CellStyle cellStyle = cell.getCellStyle();
-                                specialColumnCellStyle = (XSSFCellStyle) workbook.createCellStyle();
-                                specialColumnCellStyle.cloneStyleFrom(cellStyle);
-                                specialColumnCellStyle.getFont().setColor(specialColumn.getColor());
-                            }
                             if (specialColumn.getFunction().apply((Integer) value)) {
                                 cell.setCellStyle(specialColumnCellStyle);
                             } else {
@@ -161,22 +158,17 @@ public class SXSSFTableBuilder {
 
     static class SpecialColumn {
         private String columnName;
-        private short color;
         private XSSFCellStyle cellStyle;
         private Function<Integer, Boolean> function;
 
-        public SpecialColumn(String columnName, short color, Function<Integer, Boolean> function) {
+        public SpecialColumn(String columnName, XSSFCellStyle cellStyle, Function<Integer, Boolean> function) {
             this.columnName = columnName;
-            this.color = color;
+            this.cellStyle = cellStyle;
             this.function = function;
         }
 
         public String getColumnName() {
             return columnName;
-        }
-
-        public short getColor() {
-            return color;
         }
 
         public Function<Integer, Boolean> getFunction() {
@@ -194,10 +186,10 @@ public class SXSSFTableBuilder {
 
     static class CellStyleBuilder {
         private final SXSSFWorkbook workbook;
-        private final CellStyle cellStyle;
+        private final XSSFCellStyle cellStyle;
         private final SXSSFTableBuilder tableBuilder;
 
-        private CellStyleBuilder(SXSSFWorkbook workbook, CellStyle cellStyle, SXSSFTableBuilder tableBuilder) {
+        private CellStyleBuilder(SXSSFWorkbook workbook, XSSFCellStyle cellStyle, SXSSFTableBuilder tableBuilder) {
             this.workbook = workbook;
             this.cellStyle = cellStyle;
             this.tableBuilder = tableBuilder;
@@ -295,6 +287,10 @@ public class SXSSFTableBuilder {
 
         public SXSSFTableBuilder end() {
             return tableBuilder;
+        }
+
+        public XSSFCellStyle build() {
+            return this.cellStyle;
         }
 
     }

@@ -3,6 +3,7 @@ package org.example.template.builder;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ class SXSSFTableBuilderTest {
                         .end()))
                 .end()
                 .data(getData())
-                .addSpecialColumn("age", HSSFColor.HSSFColorPredefined.RED.getIndex(), (age) -> age < 18)
+                .addSpecialColumn("age", this::specialStyle, (age) -> age < 18)
                 .addDataStyle()
                 .border(true)
                 .newFont((b -> b.fontHeightInPoints((short) 12).fontHeightInPoints((short) 12)
@@ -37,6 +38,15 @@ class SXSSFTableBuilderTest {
                         .color(HSSFColor.HSSFColorPredefined.BLACK.getIndex())
                         .end()))
                 .end()
+                .build();
+    }
+
+
+    public XSSFCellStyle specialStyle(SXSSFTableBuilder.CellStyleBuilder builder) {
+        return builder.border(true)
+                .newFont(b -> b.fontHeightInPoints((short) 12).fontHeightInPoints((short) 12)
+                        .name("宋体")
+                        .color(HSSFColor.HSSFColorPredefined.RED.getIndex()).end())
                 .build();
     }
 
