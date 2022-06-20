@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ExportData {
-    static final String FILE_SAVE_LOCATION = "G:\\IdeaProjects\\office-template\\src\\main\\resources\\";
+    static final String FILE_SAVE_LOCATION = "D:\\IdeaProjects\\office-template\\src\\main\\resources\\";
     static final String FILE_NAME = "Test report.xlsx";
 
     public static void main(String[] args) throws IOException {
