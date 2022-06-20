@@ -5,6 +5,7 @@ import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.apache.poi.ss.usermodel.BorderStyle.THIN;
@@ -70,22 +70,22 @@ public class SXSSFTableBuilder {
         return new CellStyleBuilder(this.workbook, cellStyle, this);
     }
 
-    private CellStyle createStyle(Workbook workbook, short color) {
-        CellStyle style = workbook.createCellStyle();
-        style.setFillForegroundColor(IndexedColors.PALE_BLUE.index);
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setBorderTop(THIN);
-        style.setBorderBottom(THIN);
-        style.setBorderLeft(THIN);
-        style.setBorderRight(THIN);
-        Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 12);
-        font.setFontName("黑体");
-        font.setColor(color);
-        style.setFont(font);
-        style.setWrapText(true);
-        return style;
-    }
+//    private CellStyle createStyle(Workbook workbook, short color) {
+//        CellStyle style = workbook.createCellStyle();
+//        style.setFillForegroundColor(IndexedColors.PALE_BLUE.index);
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setBorderTop(THIN);
+//        style.setBorderBottom(THIN);
+//        style.setBorderLeft(THIN);
+//        style.setBorderRight(THIN);
+//        Font font = workbook.createFont();
+//        font.setFontHeightInPoints((short) 12);
+//        font.setFontName("黑体");
+//        font.setColor(color);
+//        style.setFont(font);
+//        style.setWrapText(true);
+//        return style;
+//    }
 
     public static SXSSFTableBuilder builder() {
         return new SXSSFTableBuilder();
@@ -98,8 +98,6 @@ public class SXSSFTableBuilder {
 
         try  {
             SXSSFSheet sheet = workbook.createSheet(sheetName);
-            headStyle = workbook.getCellStyleAt(0);
-            dataStyle = workbook.getCellStyleAt(0);
 
             int rowIndex = 0;
             SXSSFRow headerRow = sheet.createRow(rowIndex++);
@@ -124,13 +122,17 @@ public class SXSSFTableBuilder {
                     if (columnIndex != null) {
                         SXSSFCell cell = dataRow.createCell(columnIndex);
                         if (specialColumn != null) {
-                            CellStyle specialColumnCellStyle = specialColumn.getCellStyle();
+                            XSSFCellStyle specialColumnCellStyle = specialColumn.getCellStyle();
                             if (specialColumnCellStyle == null) {
-                                specialColumnCellStyle = createStyle(workbook, specialColumn.getColor());
-                                specialColumn.setCellStyle(specialColumnCellStyle);
+                                CellStyle cellStyle = cell.getCellStyle();
+                                specialColumnCellStyle = (XSSFCellStyle) workbook.createCellStyle();
+                                specialColumnCellStyle.cloneStyleFrom(cellStyle);
+                                specialColumnCellStyle.getFont().setColor(specialColumn.getColor());
                             }
                             if (specialColumn.getFunction().apply((Integer) value)) {
                                 cell.setCellStyle(specialColumnCellStyle);
+                            } else {
+                                cell.setCellStyle(dataStyle);
                             }
                         } else {
                             cell.setCellStyle(dataStyle);
@@ -160,7 +162,7 @@ public class SXSSFTableBuilder {
     static class SpecialColumn {
         private String columnName;
         private short color;
-        private CellStyle cellStyle;
+        private XSSFCellStyle cellStyle;
         private Function<Integer, Boolean> function;
 
         public SpecialColumn(String columnName, short color, Function<Integer, Boolean> function) {
@@ -181,11 +183,11 @@ public class SXSSFTableBuilder {
             return function;
         }
 
-        public CellStyle getCellStyle() {
+        public XSSFCellStyle getCellStyle() {
             return cellStyle;
         }
 
-        public void setCellStyle(CellStyle cellStyle) {
+        public void setCellStyle(XSSFCellStyle cellStyle) {
             this.cellStyle = cellStyle;
         }
     }
@@ -283,10 +285,10 @@ public class SXSSFTableBuilder {
             return cellStyle;
         }
 
-        public CellStyleBuilder newFont(Consumer<FontBuilder> consumer) {
+        public CellStyleBuilder newFont(Function<FontBuilder, Font> function) {
             Font font = workbook.createFont();
 
-            consumer.accept(new FontBuilder(this, font));
+            font = function.apply(new FontBuilder(this, font));
             this.cellStyle.setFont(font);
             return this;
         }
@@ -313,6 +315,11 @@ public class SXSSFTableBuilder {
 
         public FontBuilder fontHeight(short height) {
             font.setFontHeight(height);
+            return this;
+        }
+
+        public FontBuilder fontHeightInPoints(short height) {
+            font.setFontHeightInPoints(height);
             return this;
         }
 
@@ -356,8 +363,8 @@ public class SXSSFTableBuilder {
             return this;
         }
 
-        public CellStyleBuilder end() {
-            return cellStyleBuilder;
+        public Font end() {
+            return font;
         }
     }
 }
