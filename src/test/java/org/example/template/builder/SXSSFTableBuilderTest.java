@@ -24,7 +24,7 @@ class SXSSFTableBuilderTest {
                 .fillForegroundColor(IndexedColors.GREY_25_PERCENT.index)
                 .fillPattern(FillPatternType.SOLID_FOREGROUND)
                 .border(true)
-                .newFont((b -> b.fontHeightInPoints((short) 12).fontHeightInPoints((short) 20)
+                .newFont((b -> b.fontHeightInPoints((short) 12).fontHeightInPoints((short) 12)
                         .name("黑体")
                         .end()))
                 .end()
@@ -34,7 +34,7 @@ class SXSSFTableBuilderTest {
                 .border(true)
                 .newFont((b -> b.fontHeightInPoints((short) 12).fontHeightInPoints((short) 12)
                         .name("宋体")
-                        .color(HSSFColor.HSSFColorPredefined.BLUE.getIndex())
+                        .color(HSSFColor.HSSFColorPredefined.BLACK.getIndex())
                         .end()))
                 .end()
                 .build();
