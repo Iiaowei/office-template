@@ -15,7 +15,7 @@ import static org.apache.poi.ss.usermodel.BorderStyle.THIN;
  */
 public class CellStyleBuilder {
     private final SXSSFWorkbook workbook;
-    private final XSSFCellStyle cellStyle;
+    private  XSSFCellStyle cellStyle;
 
 
     private CellStyleBuilder(SXSSFWorkbook workbook) {
@@ -112,16 +112,12 @@ public class CellStyleBuilder {
         return this;
     }
 
-    public SXSSFTableBuilder end() {
-        return tableBuilder;
-    }
-
     public XSSFCellStyle build() {
         return this.cellStyle;
     }
 
 
     public static CellStyleBuilder builder() {
-        return new CellStyleBuilder();
+        return new CellStyleBuilder(null);
     }
 }
