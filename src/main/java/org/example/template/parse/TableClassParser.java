@@ -17,7 +17,6 @@ import java.util.*;
 public class TableClassParser {
     private static final List<Class<?>> dateClass = new ArrayList<>();
     private static final List<Class<?>> temporalClass = new ArrayList<>();
-    private static final List<Class<?>> intClass = new ArrayList<>();
     private static final List<Class<?>> decimalClass = new ArrayList<>();
 
     static {
@@ -27,14 +26,14 @@ public class TableClassParser {
         temporalClass.add(LocalTime.class);
         temporalClass.add(LocalDateTime.class);
 
-        intClass.add(int.class);
-        intClass.add(byte.class);
-        intClass.add(short.class);
-        intClass.add(long.class);
-        intClass.add(Integer.class);
-        intClass.add(Byte.class);
-        intClass.add(Short.class);
-        intClass.add(Long.class);
+        decimalClass.add(int.class);
+        decimalClass.add(byte.class);
+        decimalClass.add(short.class);
+        decimalClass.add(long.class);
+        decimalClass.add(Integer.class);
+        decimalClass.add(Byte.class);
+        decimalClass.add(Short.class);
+        decimalClass.add(Long.class);
 
         decimalClass.add(float.class);
         decimalClass.add(double.class);
@@ -53,14 +52,12 @@ public class TableClassParser {
             declaredField.setAccessible(true);
 
             column.setName(declaredField.getName());
-            Type type =  declaredField.getGenericType();
+            Type type = declaredField.getGenericType();
 
             if (dateClass.contains(type)) {
                 column.setColumnType(ColumnType.Date);
             } else if (temporalClass.contains(type)) {
                 column.setColumnType(ColumnType.Temporal);
-            } else if (intClass.contains(type)) {
-                column.setColumnType(ColumnType.Int);
             } else if (decimalClass.contains(type)) {
                 column.setColumnType(ColumnType.Decimal);
             } else {
