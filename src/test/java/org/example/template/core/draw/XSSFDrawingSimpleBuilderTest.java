@@ -1,7 +1,7 @@
 package org.example.template.core.draw;
 
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
-import org.example.template.builder.XSSFDrawingBuilder;
+import org.example.template.builder.XSSFDrawingSimpleBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,10 +12,10 @@ import java.io.OutputStream;
  * @version V1.0
  * @date 2022/6/20 11:13:18
  */
-class XSSFDrawingBuilderTest {
+class XSSFDrawingSimpleBuilderTest {
     @Test
     void drawingTest() {
-        OutputStream outputStream = XSSFDrawingBuilder.builder()
+        OutputStream outputStream = XSSFDrawingSimpleBuilder.builder()
                 .fileName("22222.xlsx")
                 .size(10, 20, 30, 40)
                 .legend(new String[]{"京东", "天猫", "拼多多"})
