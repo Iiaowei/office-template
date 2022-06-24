@@ -23,7 +23,7 @@ public class TableDescGenerate {
     }
 //    id varchar(100) primary key comment '主键',
     public static void main(String[] args) {
-        try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook("D:\\IdeaProjects\\office-template\\src\\main\\resources\\另类产品表结构.xlsx")) {
+        try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook("D:\\IdeaProjects\\office-template\\src\\main\\resources\\投资经理管理相关指标.xlsx")) {
             XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
             int rowNum = 0;
             int colNum = 0;
@@ -116,7 +116,13 @@ public class TableDescGenerate {
                 }
                 tableColumnDef.add(columnBuilder.toString());
             }
-
+            if (tableColumnDef != null) {
+                tableDesc.add(3,String.join(",\n", tableColumnDef));
+            }
+            if (tableDesc != null) {
+                System.out.println(String.join("", tableDesc));
+                System.out.println();
+            }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
