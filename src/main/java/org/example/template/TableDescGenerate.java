@@ -23,7 +23,7 @@ public class TableDescGenerate {
     }
 //    id varchar(100) primary key comment '主键',
     public static void main(String[] args) {
-        try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook("D:\\IdeaProjects\\office-template\\src\\main\\resources\\投资经理管理相关指标.xlsx")) {
+        try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook("D:\\IdeaProjects\\office-template\\src\\main\\resources\\投资明细页面.xlsx")) {
             XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
             int rowNum = 0;
             int colNum = 0;
