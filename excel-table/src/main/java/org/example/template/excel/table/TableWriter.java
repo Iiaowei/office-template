@@ -11,16 +11,20 @@ public class TableWriter implements AutoCloseable {
     private final List<ExcelTable> excelTables;
     private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-    public TableWriter() {
+    private TableWriter() {
         this.xssfWorkbook = new XSSFWorkbook();
         this.excelTables = new ArrayList<>();
     }
-    public TableWriter(InputStream inputStream) throws IOException {
+    private TableWriter(InputStream inputStream) throws IOException {
         this.xssfWorkbook = new XSSFWorkbook(inputStream);
         this.excelTables = new ArrayList<>();
     }
 
-    public static TableWriter read(InputStream templateInputStream) throws IOException {
+    public static TableWriter newTableWriter() {
+        return new TableWriter();
+    }
+
+    public static TableWriter newTableWriter(InputStream templateInputStream) throws IOException {
         return new TableWriter(templateInputStream);
     }
 
@@ -30,13 +34,17 @@ public class TableWriter implements AutoCloseable {
 
     public void finish() throws IOException {
         excelTables.forEach(excelTable -> excelTable.write(xssfWorkbook));
-
         xssfWorkbook.write(byteArrayOutputStream);
     }
 
+    public ByteArrayOutputStream getByteArrayOutputStream() {
+        return byteArrayOutputStream;
+    }
+
+    @Deprecated
     public void save(String path) throws IOException {
-        try (FileOutputStream outputStream1 = new FileOutputStream(path)) {
-            outputStream1.write(byteArrayOutputStream.toByteArray());
+        try (FileOutputStream fileOutputStream = new FileOutputStream(path)) {
+            fileOutputStream.write(byteArrayOutputStream.toByteArray());
         }
     }
 
