@@ -1,2 +1,4 @@
 rootProject.name = 'office-template'
+include 'excel-table'
+include 'excel-constant'
 
