@@ -3,6 +3,7 @@ package org.example.template;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xddf.usermodel.chart.XDDFTitle;
 import org.apache.poi.xssf.usermodel.*;
 import org.junit.jupiter.api.Test;
 import org.openxmlformats.schemas.drawingml.x2006.chart.*;
@@ -28,9 +29,9 @@ public class ChartReader {
                 System.out.println(table.getEndColIndex());
             }
             XSSFDrawing drawingPatriarch = sheet.getDrawingPatriarch();
+
             List<XSSFChart> charts = drawingPatriarch.getCharts();
             for (XSSFChart chart : charts) {
-
                 CTChart ctChart = chart.getCTChart();
                 CTPlotArea ctPlotArea = ctChart.getPlotArea();
 
