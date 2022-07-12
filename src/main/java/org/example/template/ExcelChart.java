@@ -117,24 +117,41 @@ public class ExcelChart {
                 if (ctPlotArea.getLineChartArray().length < 1) {
                     continue;
                 }
-                CTDoughnutChart ctDoughnutChart = ctPlotArea.getDoughnutChartArray(0);
-                CTPieSer[] ctPieSers = ctDoughnutChart.getSerArray();
-                if(ctPieSers.length > 0) {
-                    CTPieSer ctPieSer = ctPieSers[0];
-                    CTSerTx ctSerTx = ctPieSer.getTx();
+                CTLineChart ctLineChart = ctPlotArea.getLineChartArray(0);
+                CTLineSer[] ctLineSers = ctLineChart.getSerArray();
+                if(ctLineSers.length > 0) {
+                    CTLineSer ctLineSer = ctLineSers[0];
+                    CTSerTx ctSerTx = ctLineSer.getTx();
 
                     ctSerTx.getStrRef().setF(formatAsString(title)); //数据列标题
 
-                    CTAxDataSource cttAxDataSource = ctPieSer.getCat();
+                    CTAxDataSource cttAxDataSource = ctLineSer.getCat();
                     cttAxDataSource.getStrRef().setF(formatAsString(category));
 
-                    CTNumDataSource ctNumDataSource = ctPieSer.getVal();
+                    CTNumDataSource ctNumDataSource = ctLineSer.getVal();
+                    ctNumDataSource.getNumRef().setF(formatAsString(data));
+                }
+            } else if (ChartTypes.LINE3D == chartType) {
+                if (ctPlotArea.getLine3DChartArray().length < 1) {
+                    continue;
+                }
+                CTLine3DChart ctLine3DChart = ctPlotArea.getLine3DChartArray(0);
+                CTLineSer[] ctLineSers = ctLine3DChart.getSerArray();
+                if(ctLineSers.length > 0) {
+                    CTLineSer ctLineSer = ctLineSers[0];
+                    CTSerTx ctSerTx = ctLineSer.getTx();
+
+                    ctSerTx.getStrRef().setF(formatAsString(title)); //数据列标题
+
+                    CTAxDataSource cttAxDataSource = ctLineSer.getCat();
+                    cttAxDataSource.getStrRef().setF(formatAsString(category));
+
+                    CTNumDataSource ctNumDataSource = ctLineSer.getVal();
                     ctNumDataSource.getNumRef().setF(formatAsString(data));
                 }
             }
 
-            ctPlotArea.getLine3DChartList();
-            ctPlotArea.getOfPieChartList();
+            ctPlotArea.getPieChartArray();
             ctPlotArea.getPie3DChartList();
             ctPlotArea.getRadarChartList();
             ctPlotArea.getScatterChartList();
