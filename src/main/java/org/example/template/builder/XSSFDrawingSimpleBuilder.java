@@ -24,8 +24,8 @@ public class XSSFDrawingSimpleBuilder<V extends Number> {
     private V[] numberValues;
 
     private LegendPosition legendPosition = LegendPosition.TOP_RIGHT;
-    private AxisPosition categoryAxis = AxisPosition.BOTTOM;
-    private AxisPosition valueAxis = AxisPosition.LEFT;
+    private AxisPosition categoryAxisPosition = AxisPosition.BOTTOM;
+    private AxisPosition valueAxisPosition = AxisPosition.LEFT;
     private ChartTypes chartType = ChartTypes.SURFACE;
     private Boolean varyColors = true;
 
@@ -71,12 +71,12 @@ public class XSSFDrawingSimpleBuilder<V extends Number> {
     }
 
     public XSSFDrawingSimpleBuilder<V> categoryAxis(AxisPosition axisPosition) {
-        this.categoryAxis = axisPosition;
+        this.categoryAxisPosition = axisPosition;
         return this;
     }
 
     public XSSFDrawingSimpleBuilder<V> valueAxis(AxisPosition axisPosition) {
-        this.valueAxis = axisPosition;
+        this.valueAxisPosition = axisPosition;
         return this;
     }
 
@@ -122,8 +122,8 @@ public class XSSFDrawingSimpleBuilder<V extends Number> {
 
             XDDFNumericalDataSource<V> values = XDDFDataSourcesFactory.fromArray(numberValues);
 
-            XDDFCategoryAxis categoryAxis = chart.createCategoryAxis(this.categoryAxis);
-            XDDFValueAxis valueAxis = chart.createValueAxis(this.valueAxis);
+            XDDFCategoryAxis categoryAxis = chart.createCategoryAxis(this.categoryAxisPosition);
+            XDDFValueAxis valueAxis = chart.createValueAxis(this.valueAxisPosition);
             XDDFChartData data = chart.createData(this.chartType, categoryAxis, valueAxis);
 
             chart.displayBlanksAs(null);

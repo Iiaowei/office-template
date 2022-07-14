@@ -1,5 +1,6 @@
 package org.example.template.builder;
 
+import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -11,6 +12,7 @@ class XSSFDrawingSimpleBuilderTest {
     @Test
     void test1 () {
         XSSFDrawingSimpleBuilder.builder()
+                .chartType(ChartTypes.SCATTER)
                 .legend(new String[]{"平多多", "天猫", "京东"})
                 .values(new Integer[]{12321, 34345, 546546})
                 .sheet("设备都发vv的v")
